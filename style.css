@@ -1,0 +1,630 @@
+/* =========================
+   完全版 CSS（z-index 修正版）
+========================= */
+
+/* -------- 基本 -------- */
+* { box-sizing: border-box; }
+html,body { height: 100%; }
+body {
+    margin: 0;
+    font-family: "Helvetica Neue", "Hiragino Sans", "Noto Sans JP", sans-serif;
+    background: #ffffff;
+    color: #222;
+}
+
+/* -------- HERO -------- */
+.hero {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    background-image: url("hero.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.18);
+    z-index: 1200;
+}
+
+/* -------- HERO PC（768px以上） -------- */
+@media screen and (min-width: 768px) {
+    .hero {
+        background-position: center 20%; /* ← PC用：下を多めに見せる */
+    }
+}
+
+/* -------- HERO スマホ（768px以下） -------- */
+@media (max-width: 768px) {
+    .hero {
+        background-position: 40% 46%;  /* ← 好きな位置に調整 */
+    }
+}
+
+/* -------- ハンバーガー -------- */
+.menu-icon {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    width: 46px;              /* ← 少し幅を調整 */
+    height: 46px;             /* ← 正方形にしてズレ防止 */
+    display: flex;
+    flex-direction: column;   /* ← 縦に並べる */
+    align-items: center;
+    justify-content: center;  /* ← 上下中央に */
+    gap: 6px;                 /* ← span の間隔を gap で管理！ */
+    background: rgba(0,0,0,0.18);
+    border-radius: 10px;
+    cursor: pointer;
+    z-index: 5000;
+    padding: 0;               /* ← padding を消すことが最重要 */
+    -webkit-tap-highlight-color: transparent;
+}
+
+.menu-icon span {
+    display: block;
+    width: 28px;
+    height: 2px;
+    background: #fff;
+    transition: transform 0.28s ease, opacity 0.28s ease;
+    transform-origin: center;
+    box-shadow: 0 0 6px rgba(0,0,0,0.35);
+}
+
+/* ×変形 */
+.menu-icon.open span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+.menu-icon.open span:nth-child(2) {
+    opacity: 0;
+}
+.menu-icon.open span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+/* -------- 縦書き Familist -------- */
+.vertical-title {
+    position: fixed;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    writing-mode: vertical-rl;
+    font-size: 55px;
+    letter-spacing: 4px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.95);
+    z-index: 3500; /* メニューより下 */
+    text-shadow: 0 3px 10px rgba(0,0,0,0.45);
+    pointer-events: none;
+}
+
+/* -------- 縦型 Familist帯 -------- */
+.vertical-bar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 220px;              /* Familist 文字に合わせる位置 */
+    width: 125px;                /* 帯の太さ */
+    background: rgba(117,207,197,0.7); /* 色と透過度 */
+    z-index: 3000;             /* 文字より下、メニューより上に調整 */
+}
+
+/* -------- 縦書き Familist　スマホ（768px以下） -------- */
+@media (max-width: 768px) {
+    .vertical-title {
+        font-size: 55px;
+        right: 7px;
+    }
+}
+
+@media (max-width: 768px) {
+    .vertical-bar {
+        right: 11px;   /* ← スマホの帯位置（好きな数字に変更） */
+        width: 60px;   /* ← スマホ用に細くしたい場合は調整 */
+    }
+}
+
+/* -------- 縦書き Familist　PC（768px以上）：位置とサイズを調整 -------- */
+@media screen and (min-width: 768px) {
+    .vertical-title {
+        right: 90px;     /* ← 左へ移動（数値大ほど左へ） */
+        font-size: 100px; /* ← 大きくなる */
+    }
+    .vertical-bar {
+        right: 90px;
+        width: 125px;
+    }
+}
+
+/* -------- オーバーレイメニュー -------- */
+.overlay {
+    position: fixed;
+    inset: 0;
+    display: none;
+    background: rgba(0,0,0,0.32);
+    z-index: 4000; /* Familist より上 */
+}
+
+.overlay.show { display: block; }
+
+.overlay-menu {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 70%;
+    max-width: 360px;
+    background: rgba(117, 207, 197, 0.8);
+    text-shadow: 0 3px 10px rgba(0,0,0,0.45);
+    display: flex;
+    justify-content: center;  /* 内側を中央寄せ */
+    padding-top: 110px;
+    transform: translateX(100%);
+    transition: transform 0.35s ease;
+    z-index: 4500;   
+}
+
+/* 内部ラッパーで左揃え */
+.menu-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* リンクは左揃え */
+}
+
+/* リンク */
+.overlay-menu a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 22px;
+    margin: 18px 0;
+}
+
+/* 表示時 */
+.overlay.show .overlay-menu {
+    transform: translateX(0);
+}
+
+/* -------- スマホ対応 -------- */
+@media (max-width: 768px) {
+    .overlay-menu {
+        width: 80%;
+        max-width: none;
+        padding-top: 80px;
+    }
+}
+
+.overlay.show .overlay-menu {
+    transform: translateX(0);
+}
+
+.overlay-menu a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 22px;
+    margin: 18px 0;
+}
+
+/* -------- セクション共通 -------- */
+.section {
+    position: relative;
+    padding: 80px 80px;
+    max-width: 1000px;
+    margin: 0 auto;
+    background-image: none;
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: 400px auto;
+    z-index: 1;
+}
+
+.section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(2px);
+    z-index: 10;
+}
+
+.section * {
+    position: relative;
+    z-index: 20;
+}
+
+/* ---- セクションタイトル（中央 + 下線） ---- */
+.section h2 {
+    text-align: center;  /* ← タイトルだけ中央 */
+    margin-bottom: 20px;
+    font-size: 36px;
+    font-weight: 300;
+}
+
+.section h2 .section-title {
+    border-bottom: 3px solid rgba(117,207,197,0.7);
+    display: inline-block;  /* ← 下線を文字幅だけにする */
+    padding-bottom: 6px;
+}
+
+.section p {
+    font-size: 18px;
+    line-height: 1.8;
+    margin-bottom: 16px;
+}
+
+/* 小タイトル（会社名・事業内容・所在地）の左ライン */
+.section-box p strong {
+    font-weight: 400;
+    padding-left: 10px;
+    border-left: 3px solid rgba(117,207,197,0.7);
+}
+
+/* 左側ラベル */
+.section[data-label]::before {
+    content: attr(data-label);
+    position: absolute;
+    left: -200px;
+    top: 85px;
+    writing-mode: vertical-rl;
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: raga(60,60,60,0.85);
+    opacity: 0.7;
+    z-index: 21;
+    text-shadow:
+        -1px -1px 0 #fff,
+         1px -1px 0 #fff,
+        -1px  1px 0 #fff,
+         1px  1px 0 #fff;
+}
+
+@media (max-width: 768px) {
+    .section {
+        padding: 0px 20px;
+        max-width: 100%;
+        background-size: 100% auto;
+        background-position: top center;
+        background-repeat: repeat-y;;
+    }
+
+    .section[data-label]::before { display: none; }
+
+    .section h2 { 
+    font-size: 28px;
+    text-align: center; }
+}
+
+    }
+}
+
+/* -------- 料金 -------- */
+.price-section {
+    padding: 40px 20px;
+    background: #fafafa;
+    text-align: center;
+}
+
+.price-section h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.price-box {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.price-box p {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.price {
+    color: rgba(117,207,197,0.9);
+    font-weight: 600;
+    margin-left: 8px; /* タイトルと少し間をあける */
+}
+
+.price-list p {
+    display: flex;
+    justify-content: space-between; /* 左右に分ける */
+    align-items: baseline;
+    margin-bottom: 14px;
+}
+
+.price-list .price {
+    color: rgba(117,207,197,0.9); /* 既存の緑 */
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* 料金注意書き専用 */
+.section p.price-note {
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* -------- 会社概要 -------- */
+#about p strong {
+    display: block;
+    margin-bottom: 6px;
+}
+#about p { margin-bottom: 40px; }
+
+@media (max-width: 768px) {
+    #about p {
+        margin-bottom: 30px;
+    }
+}
+
+/* ===== セクション白背景ボックス ===== */
+.section-box {
+    background: rgba(255, 255, 255, 0.92); /* ← 白の半透明 */
+    backdrop-filter: blur(8px);/* ← すりガラス */
+    border: 1px solid rgba(255, 255, 255, 0.4);/* ← 白縁 */
+    padding: 40px 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 30; /* セクション背景より上 */
+}
+
+/* スマホ：セクションボックスを左寄せ＆帯を避ける */
+@media (max-width: 768px) {
+
+    /* セクションそのものの左右余白を減らす */
+    .section {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+}
+
+/* ===== スマホ：セクションボックスを幅調整し、帯と重ならないようにする ===== */
+@media (max-width: 768px) {
+
+    /* セクションの左右余白を少しだけ狭める */
+    .section {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    /* セクションボックス：1つにまとめた完全版 */
+    .section-box {
+        width: calc(100% - 69px ); /* 右の帯を避ける */
+        margin-left: 10px;           /* 左寄せ */
+        margin-right: auto;       /* 右側に余白を確保 */
+        margin-top: 25px; /* ← 上に近づく（数字増やすほど近づく） */
+        margin-bottom: 12px;
+        padding: 28px 15px;       /* スマホ用の余白を保持 */
+        border-radius: 10px;      /* スマホ用の角丸を維持 */
+    }
+}
+
+/* -------- フッター -------- */
+footer {
+    position: relative;       /* z-indexを効かせるためにpositionを設定 */
+    z-index: 4000;            /* vertical-bar(3000)より大きくする */
+    padding: 14px 20px;
+    text-align: center;
+    background: #d1d1d1;
+    font-size: 14px;
+    color: #666;
+}
+
+
+
+@media (max-width: 768px) {
+    footer {
+        padding: 12px 14px;     /* ← 高さ（上下余白）を減らす */
+        font-size: 12px;       /* ← 文字サイズを小さくする（任意） */
+    }
+}
+
+/* -------- 背景画像 -------- */
+body {
+    background-image: url("section-bg.jpg");
+    background-repeat: repeat-y;
+    background-size: 400px auto;
+    background-position: center top;
+}
+
+@media screen and (min-width: 768px){
+    body {
+    background-repeat: repeat;
+    background-size: 800px auto;
+    background-position: top left;
+   }
+}
+
+/* ===== サービス紹介：横スクロールスライダー（最終整理版） ===== */
+
+/* 外枠：矢印の基準点 */
+.service-slider-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+/* 横スクロール部分 */
+.service-slider {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 20px 0;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+}
+.service-slider::-webkit-scrollbar {
+    display: none;
+}
+
+/* 各カード */
+.service-card {
+    min-width: 260px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 14px;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+    padding-bottom: 20px;
+    scroll-snap-align: start;
+}
+.service-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 14px 14px 0 0;
+}
+
+/* ===== PC画面だけ：メニュー写真の縦幅を変更 ===== */
+@media screen and (min-width: 768px) {
+    .service-card img {
+        height: 380px;   /* ← 好きな高さに変更 */
+    }
+}
+/* ===================== */
+.service-card h3 {
+    font-size: 18px;
+    font-weight: 400;
+    padding-left: 10px;
+    border-left: 4px solid rgba(117,207,197,0.7);
+    margin: 18px 14px 10px;
+}
+.service-card p {
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0 14px;
+}
+
+.service-fixed-text {
+    margin-top: 16px;
+}
+
+.service-fixed-text p {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #333;
+}
+
+/* ===Googleフォームリンクの色設定=== */
+.form-link,
+.form-link:visited {
+    color: rgba(117,207,197,0.9);
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.form-link:hover {
+    opacity: 0.7;
+}
+/* ===== 矢印ボタン（白丸・重ねる） ===== */
+.slider-btn {
+    position: absolute;
+    top: 35%;
+    transform: translateY(-50%);
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(255,255, 255, 0.88);
+    border: 1px solid rgba(0,0,0,0.15);
+    color: #333;
+    font-size: 22px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    cursor: pointer;
+    z-index: 50;
+    backdrop-filter: blur(6px);
+}
+
+/* スマホ用サイズ調整 */
+@media (max-width: 768px) {
+    .slider-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+    }
+}
+
+/* 横スクロールの親（ラッパー） */
+.services-wrapper {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    gap: 16px;
+    padding: 0 24px; /* 端を少し空けて見やすく */
+}
+
+/* 1つ1つのサービスカード */
+.service-card {
+    flex: 0 0 80%; /* カードを少し大きくしてスナップ効果を強調 */
+    scroll-snap-align: center;
+}
+
+/* ===== お客様の声：横スライダー ===== */
+
+.voice-slider-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.voice-slider {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    padding: 20px 0;
+}
+.voice-slider::-webkit-scrollbar {
+    display: none;
+}
+
+/* 各カード */
+.voice-card {
+    min-width: 260px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 14px;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+    padding: 20px;
+    scroll-snap-align: center;
+}
+
+.voice-text {
+    font-size: 15px;
+    line-height: 1.7;
+    margin-bottom: 14px;
+}
+
+.voice-name {
+    font-size: 13px;
+    color: #666;
+    text-align: right;
+}
+
+@media (max-width: 768px) {
+  #voice .slider-btn {
+    top: 73%;              /* ← 縦位置をここで調整 */
+    transform: translateY(0);
+    z-index: 40;
+  }
+}
+
+.voice-fixed-text {
+    margin-top: 16px;
+}
+
+.voice-fixed-text p {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #333;
+}
