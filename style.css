@@ -543,9 +543,9 @@ body {
     backdrop-filter: blur(6px);
 }
 /* 左矢印 */ 
-.slider-btn.prev { left: 8px; }
+.slider-btn.left-btn { left: -10px; /* 数字は好みで調整 */ } 
 /* 右矢印 */ 
-.slider-btn.next { right: 8px; }
+.slider-btn.right-btn { right: -10px; }
 
 /* スマホ用サイズ調整 */
 @media (max-width: 768px) {
