@@ -542,6 +542,10 @@ body {
     z-index: 50;
     backdrop-filter: blur(6px);
 }
+/* 左矢印 */ 
+.slider-btn.prev { left: 8px; }
+/* 右矢印 */ 
+.slider-btn.next { right: 8px; }
 
 /* スマホ用サイズ調整 */
 @media (max-width: 768px) {
