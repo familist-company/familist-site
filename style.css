@@ -617,7 +617,7 @@ body {
 
 @media (max-width: 768px) {
   #voice .slider-btn {
-    top: 73%;              /* ← 縦位置をここで調整 */
+    top: 70%;              /* ← 縦位置をここで調整 */
     transform: translateY(0);
     z-index: 40;
   }
